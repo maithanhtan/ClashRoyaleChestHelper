@@ -1,0 +1,36 @@
+<!doctype html>
+<html ng-app="clashRoyale">
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular.min.js"></script>
+    <script src="app.js"></script>
+  </head>
+  <body>
+    <h2>Clash Royale - Chest Calculator</h2>
+    <div ng-controller="mainCtrl">
+      <img ng-click="addChest('Silver')" src="img/Silver_Chest.png"></img>
+      <img ng-click="addChest('Gold')" src="img/Golden_Chest.png"></img>
+      <img ng-click="addChest('Magic')" src="img/Magical_Chest.png"></img>
+      <br>
+      <h3>Chest pattern</h3>
+      <div ng-repeat="chest in pattern track by $index">
+
+        <!--{{$index+1+". "+chest}}-->
+        <img ng-show="chest == 'Magic'" src="img/Magical_Chest.png" style="height:30px"></img>
+        <img ng-show="chest == 'Gold'" src="img/Golden_Chest.png" style="height:30px"></img>
+        <img ng-show="chest == 'Silver'" src="img/Silver_Chest.png" style="height:30px"></img>
+        <a ng-click="removeChest($index)">X</a>
+      </div>
+      <h3>Results ({{res.length}} possibilities)</h3>
+      <div ng-repeat="r in res track by $index">
+        <h4> Occurency #{{$index}} </h4>
+        <div ng-repeat="i in r track by $index">
+
+          <div ng-style="r.indexOf(i) < r.length-10 && {'background-color':'green'}">{{i}}</div>
+        </div>
+
+
+        <hr>
+      </div>
+    </div>
+  </body>
+</html>
