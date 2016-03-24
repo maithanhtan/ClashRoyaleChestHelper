@@ -1,0 +1,14 @@
+{
+  "name": "ClashRoyaleChestHelper",
+  "version": "0.1.0",
+  "description": "A Node's webApp helping for Chest looting optimization for Supercell's Clash Royale",
+  "author": "Benjamin AFONSO <darkyler57@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Darkyler/ClashRoyaleChestHelper"
+  },
+  "dependencies": {
+    "express": "^4.13.4"
+  },
+  "license": "MIT"
+}
