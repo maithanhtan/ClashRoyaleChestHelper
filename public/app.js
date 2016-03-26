@@ -1,4 +1,4 @@
-angular.module('clashRoyale', [])
+angular.module('clashRoyale', ['ui.bootstrap'])
   .controller('mainCtrl', function($scope) {
 
     $scope.pattern = ['Silver','Silver','Gold'];
@@ -22,6 +22,10 @@ angular.module('clashRoyale', [])
       return pattern.length;
     }
 
+    function isUnknown(chest){
+        return (chest == 'Unknown');
+    }
+
     function getAllIndexes(pattern){
       var indexes = [];
       var i = -1;
@@ -29,6 +33,30 @@ angular.module('clashRoyale', [])
         indexes.push(i);
       }
       return indexes;
+    }
+
+
+    function searchFistMagic(results, pattern){
+        // Pour chaque résultat, cherchez la distance au plus proche magique.
+        var min = 240;
+        for(var i=0;i < results.length; i++){
+            var last = results[i]+pattern.length;
+            Magics = [11,131,203];
+            Magics.forEach(function(magic){
+
+                if (last > magic){
+                    magic = magic + 240;
+                }
+                d = Math.abs(magic - last) % tab.length
+                if (d < min){
+                    min = d;
+                }
+            });
+
+        }
+
+
+        return min;
     }
 
     function getAllPossibilities(pattern){
@@ -40,7 +68,7 @@ angular.module('clashRoyale', [])
         count = 0;
         for (var i = indexes[j]; i < indexes[j]+length; i++)
         {
-          if (pattern[i-indexes[j]] !== tab[i]){
+          if (!(isUnknown(pattern[i-indexes[j]])) && pattern[i-indexes[j]] !== tab[i]){
             // Différence pattern / cycle
             break;
           }
@@ -53,13 +81,20 @@ angular.module('clashRoyale', [])
       return result;
     };
 
-    function afficherResultats(result, pattern, range){
+
+    function getResultat(result, pattern, range){
       var res = [];
       for (var j = 0; j<result.length; j++){
         var temp=[];
         for (var i = result[j]; i < result[j]+pattern.length+range; i++)
         {
-          temp.push(i+". "+tab[i]);
+          if (i < result[j]+pattern.length){
+              isPattern = true;
+          }
+          else{
+              isPattern = false;
+          }
+          temp.push([isPattern,i,tab[i]]);
         }
         res.push(temp);
       }
@@ -67,13 +102,24 @@ angular.module('clashRoyale', [])
       return res;
     }
 
+    $scope.active = 0;
+
+    $scope.setActive = function(num){
+        $scope.active = num;
+    }
+
+    $scope.isActive = function(num){
+        return $scope.active == num;
+    }
+
     $scope.refresh = function(){
       $scope.result = getAllPossibilities($scope.pattern);
-      $scope.res = afficherResultats($scope.result,$scope.pattern,10);
+      $scope.res = getResultat($scope.result, $scope.pattern, 10);
+      $scope.distMin = searchFistMagic($scope.result, $scope.pattern);
     }
     $scope.result = getAllPossibilities($scope.pattern);
-
-    $scope.res = afficherResultats($scope.result,$scope.pattern,10);
+    $scope.distMin = searchFistMagic($scope.result, $scope.pattern);
+    $scope.res = getResultat($scope.result, $scope.pattern, 10);
 
 
 

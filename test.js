@@ -257,7 +257,9 @@ function getPatternSize(pattern){
 * Check if 2 arrays are equals
 */
 
-
+function isUnknown(chest){
+    return chest == 'Unknown';
+}
 function getAllPossibilities(pattern){
   var length = getPatternSize(pattern);
   var indexes = getAllIndexes(pattern);
@@ -267,7 +269,7 @@ function getAllPossibilities(pattern){
     count = 0;
     for (var i = indexes[j]; i < indexes[j]+length; i++)
     {
-      if (pattern[i-indexes[j]] !== tab[i]){
+      if (!(isUnknown(chest)) && pattern[i-indexes[j]] !== tab[i]){
         // Différence pattern / cycle
         break;
       }
@@ -291,6 +293,32 @@ function getAllIndexes(pattern){
 }
 
 
+function searchFistMagic(results, pattern){
+    // Pour chaque résultat, cherchez la distance au plus proche magique.
+    var min = 240;
+    for(var i=0;i < results.length; i++){
+        var last = results[i]+pattern.length;
+        Magics = [11,131,203];
+        Magics.forEach(function(magic){
+
+            if (last > magic){
+                magic = magic + 240;
+            }
+            d = Math.abs(magic - last) % tab.length
+            if (d < min){
+                min = d;
+            }
+        });
+
+        ( (203+240)- 219)
+
+    }
+
+
+    return min;
+}
+
+
 
 
 function afficherResultats(result, pattern, range){
@@ -304,6 +332,7 @@ function afficherResultats(result, pattern, range){
   console.log("________________");
   }
 }
+
 
 function saisirPattern(){
     var j=1;
@@ -325,12 +354,16 @@ function saisirPattern(){
       r1.prompt();
     }).on('close', function(){
 
+
       result = getAllPossibilities(pattern);
-      afficherResultats(result,pattern,10);
+      afficherResultats(result,pattern,25);
       console.log("Nombre de résultat trouvés: "+result.length);
+
+      firstMagic = searchFistMagic(result,pattern);
+      console.log(firstMagic);
       process.exit(0);
 
     });
 }
-
+console.log(tab.length);
 pattern = saisirPattern();
