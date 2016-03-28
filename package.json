@@ -11,7 +11,7 @@
     "express": "^4.13.4"
   },
   "engines": {
-    "express": "4.13.4"
+    "node": "4.1.1"
   },
   "license": "MIT"
 }
